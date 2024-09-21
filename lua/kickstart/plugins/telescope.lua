@@ -107,6 +107,11 @@ return {
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+
+      -- Shortcut for searching your Aerospace configuration files
+      vim.keymap.set('n', '<leader>sc', function()
+        builtin.find_files { cwd = '~/.config/' }
+      end, { desc = '[S]earch [C]onfig files' })
     end,
   },
 }
