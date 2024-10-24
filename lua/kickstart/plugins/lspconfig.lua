@@ -11,6 +11,9 @@ return {
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim', opts = {} },
 
+      -- Autoformatting
+      'stevearc/conform.nvim',
+
       -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
       -- used for completion, annotations and signatures of Neovim apis
       { 'folke/neodev.nvim', opts = {} },
@@ -156,9 +159,44 @@ return {
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
+        --        clangd = {
+        --          keys = {
+        --            { '<leader>ch', '<cmd>ClangdSwitchSourceHeader<cr>', desc = 'Switch Source/Header (C/C++)' },
+        --          },
+        --          root_dir = function(fname)
+        --            return require('lspconfig.util').root_pattern(
+        --              'Makefile',
+        --              'configure.ac',
+        --              'configure.in',
+        --              'config.h.in',
+        --              'meson.build',
+        --              'meson_options.txt',
+        --              'build.ninja'
+        --            )(fname) or require('lspconfig.util').root_pattern('compile_commands.json', 'compile_flags.txt')(fname) or require('lspconfig.util').find_git_ancestor(
+        --              fname
+        --            )
+        --          end,
+        --          capabilities = {
+        --            offsetEncoding = { 'utf-16' },
+        --          },
+        --          cmd = {
+        --            'clangd',
+        --            '--background-index',
+        --            '--clang-tidy',
+        --            '--header-insertion=iwyu',
+        --            '--completion-style=detailed',
+        --            '--function-arg-placeholders',
+        --            '--fallback-style=llvm',
+        --          },
+        --          init_options = {
+        --            usePlaceholders = true,
+        --            completeUnimported = true,
+        --            clangdFileStatus = true,
+        --          },
+        --        },
         -- gopls = {},
-        -- pyright = {},
+        bashls = {},
+        cmake = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -183,6 +221,13 @@ return {
             },
           },
         },
+        ruff_lsp = {
+          init_options = {
+            settings = {
+              interpreter = { '.venv/bin/python' },
+            },
+          },
+        },
       }
 
       -- Ensure the servers and tools above are installed
@@ -198,6 +243,8 @@ return {
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'ruff', -- Used to format and lint Python code
+        'actionlint', -- Used to lint GitHub Actions
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -213,6 +260,35 @@ return {
           end,
         },
       }
+      -- Autoformatting Setup
+      local conform = require 'conform'
+      conform.setup {
+        formatters_by_ft = {
+          lua = { 'stylua' },
+          --          clang_format = { 'clang-format' },
+        },
+      }
+
+      conform.formatters.injected = {
+        options = {
+          ignore_errors = false,
+          lang_to_formatters = {
+            sql = { 'sleek' },
+          },
+        },
+      }
+
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        callback = function(args)
+          -- local filename = vim.fn.expand "%:p"
+
+          require('conform').format {
+            bufnr = args.buf,
+            lsp_fallback = true,
+            quiet = true,
+          }
+        end,
+      })
     end,
   },
 }
