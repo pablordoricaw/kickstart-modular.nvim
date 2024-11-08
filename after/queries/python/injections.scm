@@ -24,3 +24,14 @@
  (#match? @injection.content "__host__")
  (#set! injection.language "cuda"))
 
+((string_content) @injection.content
+ (#match? @injection.content "__kernel")
+ (#set! injection.language "cuda"))
+
+((string_content) @injection.content
+ (#match? @injection.content "__global")
+ (#set! injection.language "cuda"))
+
+((string_content) @injection.content
+ (#match? @injection.content "__local")
+ (#set! injection.language "cuda"))
