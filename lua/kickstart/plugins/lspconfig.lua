@@ -229,7 +229,7 @@ return {
             },
           },
         },
-        ruff_lsp = {
+        ruff = {
           init_options = {
             settings = {
               interpreter = { '.venv/bin/python' },
@@ -253,6 +253,7 @@ return {
         'stylua', -- Used to format Lua code
         'ruff', -- Used to format and lint Python code
         'actionlint', -- Used to lint GitHub Actions
+        'yamlfmt',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -274,6 +275,7 @@ return {
         formatters_by_ft = {
           lua = { 'stylua' },
           --          clang_format = { 'clang-format' },
+          yaml = { 'yamlfmt' },
         },
       }
 
