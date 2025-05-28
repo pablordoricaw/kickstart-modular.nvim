@@ -245,7 +245,7 @@ return {
         --            clangdFileStatus = true,
         --          },
         --        },
-        -- gopls = {},
+        gopls = {},
         bashls = {},
         cmake = {},
         -- rust_analyzer = {},
