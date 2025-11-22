@@ -1,3 +1,23 @@
+-- Function to check if Obsidian app is installed
+local function is_obsidian_installed()
+  -- macOS: check for executable in Applications
+  if vim.fn.has 'macunix' == 1 then
+    local obs_app = vim.fn.glob '/Applications/Obsidian.app'
+    return obs_app ~= ''
+  end
+  -- Linux: check if obsidian is in PATH
+  if vim.fn.has 'unix' == 1 then
+    return vim.fn.executable 'obsidian' == 1
+  end
+  -- If not macOS or Linux, assume not installed
+  return false
+end
+
+if not is_obsidian_installed() then
+  -- If not installed, disable the plugin by returning an empty table
+  return {}
+end
+
 return {
   'epwalsh/obsidian.nvim',
   version = '*', -- recommended, use latest release instead of latest commit
@@ -160,7 +180,7 @@ return {
 
     -- Optional, for templates (see below).
     templates = {
-      folder = 'templates',
+      folder = '~/Documents/Projects/obsidian/templates',
       date_format = '%Y-%m-%d',
       time_format = '%H:%M',
       -- A map for custom variables, the key should be the variable and the value a function
