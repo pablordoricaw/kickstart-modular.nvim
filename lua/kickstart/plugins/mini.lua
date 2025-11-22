@@ -8,7 +8,21 @@ return {
       --  - va)  - [V]isually select [A]round [)]paren
       --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
       --  - ci'  - [C]hange [I]nside [']quote
-      require('mini.ai').setup { n_lines = 500 }
+      require('mini.ai').setup {
+        custom_textobjects = {
+          -- snake_case
+          s = { '()%w+()_' }, -- snake
+          S = { '_()%w+()' }, -- case
+        },
+        n_lines = 500,
+      }
+      local spec_pair = require('mini.ai').gen_spec.pair
+      vim.b.miniai_config = {
+        custom_textobjects = {
+          ['*'] = spec_pair('*', '*', { type = 'greedy' }),
+          ['_'] = spec_pair('_', '_', { type = 'greedy' }),
+        },
+      }
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
       --
