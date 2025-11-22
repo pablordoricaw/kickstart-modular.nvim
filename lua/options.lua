@@ -6,6 +6,9 @@
 -- Set the tab size
 vim.o.tabstop = 4
 
+-- Set the shiftwidth size (how many spaces to do with a single tab)
+vim.o.shiftwidth = 4
+
 -- For Obsidian.nvim
 vim.o.conceallevel = 2
 
