@@ -51,4 +51,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- [[ Run Lua Keymaps ]]
+vim.keymap.set('n', '<leader><leader>x', '<cmd>source %<CR>')
+vim.keymap.set('n', '<leader>x', ':.lua<CR>') -- run line
+vim.keymap.set('v', '<leader>x', ':lua<CR>') -- run selected lines
+
 -- vim: ts=2 sts=2 sw=2 et
