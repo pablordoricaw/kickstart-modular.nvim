@@ -31,6 +31,18 @@ return {
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
+      -- Work with trailing whitespace
+      --
+      -- - Trim all trailing whitespace with :lua MiniTrailspace.trim()
+      -- - Trim all trailing empty lines with :lua MiniTrailspace.trim_last_lines()
+      require('mini.trailspace').setup()
+      vim.api.nvim_create_augroup('MiniTrailspace', { clear = true }) -- clear on reload
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        callback = function()
+          MiniTrailspace.trim()
+        end,
+      })
+
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
