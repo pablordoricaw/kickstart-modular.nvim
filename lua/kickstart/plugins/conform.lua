@@ -36,6 +36,20 @@ return {
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        yaml = { 'yamlfmt' },
+      },
+      formatters = {
+        yamlfmt = {
+          args = { '-formatter', 'retain_line_breaks=true', '-in' },
+        },
+        injected = {
+          options = {
+            ignore_errors = false,
+            lang_to_formatters = {
+              sql = { 'sleek' },
+            },
+          },
+        },
       },
     },
   },
